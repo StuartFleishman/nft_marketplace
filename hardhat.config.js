@@ -1,5 +1,7 @@
 require("@nomiclabs/hardhat-waffle");
 require('dotenv').config();
+const fs = require('fs');
+const privateKey = fs.readFileSync(".secret").toString().trim()
 
 
 
@@ -12,11 +14,12 @@ module.exports = {
     
     mumbai: {
       url: `https://polygon-mumbai.infura.io/v3/2e7045ea99834be69200c714b6b3d64d${process.env.PROJECT_ID}`,
-      accounts: []
+      accounts: [privateKey],
     },
     matic: {
       // Infura
       url: `https://polygon-mainnet.infura.io/v3/${process.env.PROJECT_ID}`,
+      accounts: [privateKey],
     },
   },
   solidity: {
