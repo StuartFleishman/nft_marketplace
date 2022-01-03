@@ -33,4 +33,20 @@ contract AdvancedCollectible is ERC721, VRFConsumerBase {
         emit requestedCollectible(requestId, msg.sender);
     }
 
+    function fulfillRandomness(bytes32 requestId, uint256 randomNumber) internal override {
+        Breed breed = Breed(randomNumber % 3);
+        uint256 newTokenId = tokenCounter;
+        tokenIdToBreed[newTokenId] = breed;
+        emit breedAssigned(newTokenId, breed);
+        address owner = requestIdToSender[requestId];
+        _safeMint(owner, newTokenId);
+        tokenCounter = tokenCounter + 1;
+    }
+
+    function setTokenURI(uint256 tokenId, string memory _tokenURI) public {
+        // pug, shiba inu, st bernard
+        require(_isApprovedOrOwner(_msgSender(), tokenId), "ERC721: caller is not owner no approved");
+        _setTokenURI(tokenId, _tokenURI);
+    }
+
 }
